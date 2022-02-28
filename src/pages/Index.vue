@@ -10,15 +10,13 @@
 
 <script>
 import { defineComponent } from "vue";
-// const { DeepstreamClient } = window.DeepstreamClient;
+import { useStore } from "vuex";
 
 export default defineComponent({
   name: "PageIndex",
   setup() {
-    // const cliente = new DeepstreamClient("localhost:6020");
-    // cliente.login();
-    // console.log(cliente.getUid());
-    // cliente.close();
+    const $store = useStore();
+    $store.commit("kraken/login", "localhost:6020");
 
     return {};
   },
