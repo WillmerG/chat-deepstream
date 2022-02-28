@@ -16,7 +16,10 @@ export default defineComponent({
   name: "PageIndex",
   setup() {
     const $store = useStore();
+
+    console.log("Voy1", $store.state.kraken.uid);
     $store.commit("kraken/login", "localhost:6020");
+    console.log("Voy2", $store.state.kraken.uid);
 
     return {};
   },

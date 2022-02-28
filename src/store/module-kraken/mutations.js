@@ -3,6 +3,7 @@ const { DeepstreamClient } = window.DeepstreamClient;
 export function login(state, url) {
   state.cliente = new DeepstreamClient(url);
   state.cliente.login();
+  state.uid = state.cliente.getUid();
   state.record = state.cliente.record.getRecord("I-am-Kraken");
 }
 
