@@ -10,8 +10,19 @@
 
 <script>
 import { defineComponent } from "vue";
+// import { DeepstreamClient } from "@deepstream/client";
+const { DeepstreamClient } = window.DeepstreamClient;
 
 export default defineComponent({
   name: "PageIndex",
+  setup() {
+    const cliente = new DeepstreamClient("localhost:6020");
+    cliente.login();
+
+    return {};
+  },
+  unmounted() {
+    cliente.logout();
+  },
 });
 </script>
