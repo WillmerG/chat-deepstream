@@ -1,5 +1,3 @@
-import { useStore } from "vuex";
-
 const routes = [
   {
     path: "/",
@@ -8,15 +6,7 @@ const routes = [
       {
         path: "",
         component: () => import("pages/Index.vue"),
-        beforeEnter: (to, from, next) => {
-          const $store = useStore();
-          console.log("Voy1", $store);
-
-          // next("login");
-          next();
-        },
       },
-      { path: "login", component: () => import("pages/Login.vue") },
     ],
   },
 

@@ -4,7 +4,13 @@ export default function () {
   return {
     cliente: DeepstreamClient,
     chat: "",
-    uid: "",
+    user: {
+      uid: "",
+      email: "",
+      activo: false,
+    },
+    err: false,
+    mensaje: "",
     record: null,
     listUser: [],
   };
