@@ -24,9 +24,9 @@
     </q-header>
 
     <q-drawer v-model="drawer" :width="200">
-      <h6 class="q-my-none q-pa-sm" style="border-right: 1px solid #ddd">
-        Usuarios Conectados
-      </h6>
+      <div class="text-center q-py-md" style="border-right: 1px solid #ddd">
+        <b> Usuarios Conectados </b>
+      </div>
       <q-scroll-area
         style="height: calc(100% - 80px); border-right: 1px solid #ddd"
       >
