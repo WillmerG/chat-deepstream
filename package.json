@@ -15,6 +15,7 @@
     "@deepstream/client": "^5.2.7",
     "@quasar/extras": "^1.0.0",
     "core-js": "^3.6.5",
+    "process": "^0.11.10",
     "quasar": "^2.0.0",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0",

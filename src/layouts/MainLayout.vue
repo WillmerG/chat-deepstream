@@ -23,49 +23,6 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer v-model="drawer" :width="200">
-      <div class="text-center q-py-md" style="border-right: 1px solid #ddd">
-        <b> Usuarios Conectados </b>
-      </div>
-      <q-scroll-area
-        style="height: calc(100% - 80px); border-right: 1px solid #ddd"
-      >
-        <q-list padding>
-          <q-item clickable v-ripple>
-            <q-item-section avatar>
-              <q-icon name="inbox" />
-            </q-item-section>
-
-            <q-item-section> Inbox </q-item-section>
-          </q-item>
-
-          <q-item active clickable v-ripple>
-            <q-item-section avatar>
-              <q-icon name="star" />
-            </q-item-section>
-
-            <q-item-section> Star </q-item-section>
-          </q-item>
-
-          <q-item clickable v-ripple>
-            <q-item-section avatar>
-              <q-icon name="send" />
-            </q-item-section>
-
-            <q-item-section> Send </q-item-section>
-          </q-item>
-
-          <q-item clickable v-ripple>
-            <q-item-section avatar>
-              <q-icon name="drafts" />
-            </q-item-section>
-
-            <q-item-section> Drafts </q-item-section>
-          </q-item>
-        </q-list>
-      </q-scroll-area>
-    </q-drawer>
-
     <q-page-container>
       <router-view />
     </q-page-container>
@@ -78,6 +35,7 @@
         label="Mensaje"
         rounded
         bg-color="grey-4"
+        @input="onChange()"
       >
         <template v-slot:after>
           <q-btn round color="grey-4" text-color="black" icon="send" />
@@ -90,14 +48,25 @@
 <script>
 import { ref } from "vue";
 import { useStore } from "vuex";
+import { DeepstreamClient } from "@deepstream/client";
 
 export default {
+  data() {
+    return {
+      ds: null,
+      record: null,
+    };
+  },
   setup() {
     const drawer = ref(true);
     const store = useStore();
 
     const onSalir = () => {
       store.commit("kraken/setLogout");
+    };
+
+    const onChange = () => {
+      this.record.set("texto", this.text);
     };
 
     return {
@@ -107,6 +76,17 @@ export default {
       store,
       onSalir,
     };
+  },
+  created() {
+    this.ds = new DeepstreamClient("localhost:6020");
+    this.ds.login();
+    console.log(this.ds);
+
+    this.record = this.ds.record.getRecord("text/chat");
+    this.record.set({ texto: this.text });
+    this.record.subscribe((val) => {
+      this.text = val.texto;
+    });
   },
 };
 </script>

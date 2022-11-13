@@ -5,6 +5,7 @@ export function dsLogin(state, url) {
   state.cliente.login();
   state.user.uid = state.cliente.getUid();
   state.record = state.cliente.record.getRecord("I-am-Kraken");
+  getUsersList(state);
 }
 
 export function setLoginRegis(state, valores) {
@@ -41,7 +42,7 @@ export function setLogout(state) {
     state,
     buscaUser(state, state.user.email),
     state.user.email,
-    state.user.email
+    state.user.password
   );
 }
 
@@ -62,6 +63,9 @@ function setUsers(state, index, email, password) {
 
   if (index !== -1 && state.listUser[index].password === password) {
     state.listUser[index].activo = !state.listUser[index].activo;
+
+    state.user.activo = state.listUser[index].activo;
+    state.user.email = state.listUser[index].email;
   } else {
     state.listUser.push({
       email,
@@ -71,12 +75,9 @@ function setUsers(state, index, email, password) {
 
     index = state.listUser.length - 1;
     state.mensaje = "Registro exitoso";
+
+    state.record.set("lsUser", state.listUser);
   }
-
-  state.user.activo = state.listUser[index].activo;
-  state.user.email = state.listUser[index].email;
-
-  state.record.set("lsUser", state.listUser);
 }
 
 function buscaUser(state, email) {

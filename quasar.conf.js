@@ -9,6 +9,7 @@
 /* eslint-env node */
 const ESLintPlugin = require("eslint-webpack-plugin");
 const { configure } = require("quasar/wrappers");
+const webpack = require("webpack");
 
 module.exports = configure(function (ctx) {
   return {
@@ -67,6 +68,19 @@ module.exports = configure(function (ctx) {
         chain
           .plugin("eslint-webpack-plugin")
           .use(ESLintPlugin, [{ extensions: ["js", "vue"] }]);
+      },
+      extendWebpack(cfg) {
+        cfg.plugins.push(
+          new webpack.ProvidePlugin({
+            process: "process/browser",
+            Buffer: ["buffer", "Buffer"],
+          })
+        );
+        cfg.resolve.extensions["js"];
+        cfg.resolve.fallback = {
+          stream: "stream-browserify",
+          buffer: "buffer",
+        };
       },
     },
 
