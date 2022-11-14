@@ -2,9 +2,6 @@
   <q-layout view="lHh Lpr lff">
     <q-header elevated class="bg-cyan-8">
       <q-toolbar>
-        <q-btn flat @click="drawer = !drawer" round dense icon="people">
-          <q-tooltip>Lista de Usuarios Conectados</q-tooltip>
-        </q-btn>
         <q-toolbar-title>{{
           store.state.kraken.user.activo
             ? store.state.kraken.user.email
@@ -48,7 +45,6 @@
 <script>
 import { ref } from "vue";
 import { useStore } from "vuex";
-import { DeepstreamClient } from "@deepstream/client";
 
 export default {
   data() {
@@ -58,7 +54,6 @@ export default {
     };
   },
   setup() {
-    const drawer = ref(true);
     const store = useStore();
 
     const onSalir = () => {
@@ -70,23 +65,14 @@ export default {
     };
 
     return {
-      drawer,
       text: ref(""),
       dense: ref(false),
       store,
       onSalir,
     };
   },
-  created() {
-    this.ds = new DeepstreamClient("localhost:6020");
-    this.ds.login();
-    console.log(this.ds);
-
-    this.record = this.ds.record.getRecord("text/chat");
-    this.record.set({ texto: this.text });
-    this.record.subscribe((val) => {
-      this.text = val.texto;
-    });
+  unmounted() {
+    store.commit("kraken/dsClose");
   },
 };
 </script>

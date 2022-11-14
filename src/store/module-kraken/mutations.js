@@ -5,6 +5,7 @@ export function dsLogin(state, url) {
   state.cliente.login();
   state.user.uid = state.cliente.getUid();
   state.record = state.cliente.record.getRecord("I-am-Kraken");
+  state.evento = state.cliente.event;
   getUsersList(state);
 }
 
@@ -21,7 +22,7 @@ export function setLoginRegis(state, valores) {
     if (index < 0) {
       state.mensaje = "Usuario no registrado";
     } else if (state.listUser[index].password !== password) {
-      state.mensaje = "Password inválidos";
+      state.mensaje = "Password inválido";
     }
   } else {
     if (index !== -1) {
@@ -47,13 +48,13 @@ export function setLogout(state) {
 }
 
 export function getUsersList(state) {
-  state.record.subscribe("lsUser", function (value) {
+  state.evento.subscribe("lsUser", function (value) {
     state.listUser = [...value];
   });
 }
 
-export function dsLogout(state) {
-  state.record.unsubscribe("lsUser");
+export function dsClose(state) {
+  state.evento.unsubscribe("lsUser");
   state.cliente.close();
 }
 
@@ -66,6 +67,7 @@ function setUsers(state, index, email, password) {
 
     state.user.activo = state.listUser[index].activo;
     state.user.email = state.listUser[index].email;
+    state.user.password = state.listUser[index].password;
   } else {
     state.listUser.push({
       email,
@@ -75,9 +77,9 @@ function setUsers(state, index, email, password) {
 
     index = state.listUser.length - 1;
     state.mensaje = "Registro exitoso";
-
-    state.record.set("lsUser", state.listUser);
   }
+
+  state.evento.emit("lsUser", state.listUser);
 }
 
 function buscaUser(state, email) {
