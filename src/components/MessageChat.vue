@@ -1,6 +1,10 @@
 <template>
   <div class="q-pa-md row justify-center">
-    <div style="width: 100%" :key="i" v-for="(val, i) in listChat">
+    <div
+      style="width: 100%"
+      :key="i"
+      v-for="(val, i) in store.state.kraken.chat"
+    >
       <q-chat-message
         v-if="emailX === val.email"
         name="tu"
@@ -22,23 +26,18 @@ import { useStore } from "vuex";
 export default {
   name: "PageMessageChat",
   setup() {
-    const $store = useStore();
-    const emailX = $store.state.kraken.user.email;
-    console.log(emailX);
+    const store = useStore();
+    const emailX = store.state.kraken.user.email;
+
+    // store.commit("kraken/getChatList");
 
     return {
-      $store: $store,
+      store,
       emailX,
     };
   },
-  computed() {
-    const listChat = () => {
-      return $storeate.kraken.chat;
-    };
-
-    return {
-      listChat,
-    };
+  created: function () {
+    // this.$store.commit("kraken/getUsersList");
   },
 };
 </script>

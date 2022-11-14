@@ -3,8 +3,8 @@
     <q-header elevated class="bg-cyan-8">
       <q-toolbar>
         <q-toolbar-title>{{
-          $store.state.kraken.user.activo
-            ? $store.state.kraken.user.email
+          store.state.kraken.user.activo
+            ? store.state.kraken.user.email
             : "Chat"
         }}</q-toolbar-title>
         <q-btn
@@ -12,7 +12,7 @@
           @click="onSalir"
           round
           icon="input"
-          v-if="$store.state.kraken.user.activo"
+          v-if="store.state.kraken.user.activo"
         >
           <q-tooltip>Salir Del Chat</q-tooltip>
         </q-btn>
@@ -26,7 +26,7 @@
     <q-footer
       elevated
       class="bg-cyan-8 q-pa-sm"
-      v-if="$store.state.kraken.user.activo"
+      v-if="store.state.kraken.user.activo"
     >
       <q-input
         outlined
@@ -57,27 +57,28 @@ import { useStore } from "vuex";
 
 export default {
   setup() {
-    const $store = useStore();
+    const store = useStore();
+    store.commit("kraken/setChat", "");
     const texto = ref("");
 
     const onSalir = () => {
-      $store.commit("kraken/setLogout");
+      store.commit("kraken/setLogout");
     };
 
     const onMensaje = () => {
-      $store.commit("kraken/setChat", texto.value);
+      store.commit("kraken/setChat", texto.value);
       texto.value = "";
     };
 
     return {
       texto,
-      $store,
+      store,
       onSalir,
       onMensaje,
     };
   },
   unmounted() {
-    $store.commit("kraken/dsClose");
+    store.commit("kraken/dsClose");
   },
 };
 </script>

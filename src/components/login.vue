@@ -46,7 +46,7 @@ import { useQuasar } from "quasar";
 export default {
   name: "Login",
   setup() {
-    const $store = useStore();
+    const store = useStore();
     const q$ = useQuasar();
     const email = ref("");
     const password = ref("");
@@ -60,21 +60,21 @@ export default {
     };
 
     const onSubmit = () => {
-      $store.commit("kraken/setLoginRegis", [
+      store.commit("kraken/setLoginRegis", [
         email.value,
         password.value,
         loginRegistro.value,
       ]);
 
-      if ($store.state.kraken.mensaje.trim() !== "") {
+      if (store.state.kraken.mensaje.trim() !== "") {
         q$.notify({
-          message: $store.state.kraken.mensaje,
-          color: $store.state.kraken.err ? "negative" : "positive",
-          icon: $store.state.kraken.err ? "warning" : "done",
+          message: store.state.kraken.mensaje,
+          color: store.state.kraken.err ? "negative" : "positive",
+          icon: store.state.kraken.err ? "warning" : "done",
         });
       }
 
-      if (loginRegistro.value && !$store.state.kraken.err) {
+      if (loginRegistro.value && !store.state.kraken.err) {
         formulariLogin.value.resetValidation();
         onReset();
       }
