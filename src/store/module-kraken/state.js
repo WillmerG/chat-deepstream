@@ -3,10 +3,11 @@ const { DeepstreamClient } = window.DeepstreamClient;
 export default function () {
   return {
     cliente: DeepstreamClient,
-    chat: "",
+    chat: [],
     user: {
       uid: "",
       email: "",
+      password: "",
       activo: false,
     },
     err: false,

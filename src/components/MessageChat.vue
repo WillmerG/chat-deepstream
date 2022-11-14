@@ -1,0 +1,50 @@
+<template>
+  <div class="q-pa-md row justify-center">
+    <div
+      style="width: 100%"
+      :key="i"
+      v-for="(val, i) in $store.state.kraken.chat"
+    >
+      <q-chat-message
+        v-if="emailX === val.email"
+        name="tu"
+        :text="[val.mensaje]"
+        sent
+      />
+      <q-chat-message
+        v-if="emailX !== val.email"
+        :name="[val.email]"
+        :text="[val.mensaje]"
+      />
+    </div>
+  </div>
+</template>
+
+<script>
+import { useStore } from "vuex";
+import { ref } from "vue";
+
+export default {
+  name: "PageMessageChat",
+  setup() {
+    const $store = useStore();
+
+    return {
+      $store: $store,
+    };
+  },
+  computed: {
+    listChat() {
+      $store.commit("kraken/getChatList");
+      return $store.state.kraken.chat;
+    },
+
+    emailX() {
+      return $store.state.kraken.user.email;
+    },
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+</style>

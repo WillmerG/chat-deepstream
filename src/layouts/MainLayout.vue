@@ -3,17 +3,16 @@
     <q-header elevated class="bg-cyan-8">
       <q-toolbar>
         <q-toolbar-title>{{
-          store.state.kraken.user.activo
-            ? store.state.kraken.user.email
+          $store.state.kraken.user.activo
+            ? $store.state.kraken.user.email
             : "Chat"
         }}</q-toolbar-title>
         <q-btn
           flat
           @click="onSalir"
           round
-          dense
           icon="input"
-          v-if="store.state.kraken.user.activo"
+          v-if="$store.state.kraken.user.activo"
         >
           <q-tooltip>Salir Del Chat</q-tooltip>
         </q-btn>
@@ -24,18 +23,28 @@
       <router-view />
     </q-page-container>
 
-    <!-- <q-footer elevated class="bg-cyan-8"> -->
-    <q-footer elevated class="bg-cyan-8 q-pa-sm">
+    <q-footer
+      elevated
+      class="bg-cyan-8 q-pa-sm"
+      v-if="$store.state.kraken.user.activo"
+    >
       <q-input
         outlined
-        v-model="text"
+        v-model="texto"
+        type="text"
         label="Mensaje"
+        @keyup.enter="onMensaje"
         rounded
         bg-color="grey-4"
-        @input="onChange()"
       >
         <template v-slot:after>
-          <q-btn round color="grey-4" text-color="black" icon="send" />
+          <q-btn
+            round
+            color="grey-4"
+            text-color="black"
+            icon="send"
+            @click="onMensaje"
+          />
         </template>
       </q-input>
     </q-footer>
@@ -47,32 +56,28 @@ import { ref } from "vue";
 import { useStore } from "vuex";
 
 export default {
-  data() {
-    return {
-      ds: null,
-      record: null,
-    };
-  },
   setup() {
-    const store = useStore();
+    const $store = useStore();
+    const texto = ref("");
 
     const onSalir = () => {
-      store.commit("kraken/setLogout");
+      $store.commit("kraken/setLogout");
     };
 
-    const onChange = () => {
-      this.record.set("texto", this.text);
+    const onMensaje = () => {
+      $store.commit("kraken/setChat", texto.value);
+      texto.value = "";
     };
 
     return {
-      text: ref(""),
-      dense: ref(false),
-      store,
+      texto,
+      $store,
       onSalir,
+      onMensaje,
     };
   },
   unmounted() {
-    store.commit("kraken/dsClose");
+    $store.commit("kraken/dsClose");
   },
 };
 </script>

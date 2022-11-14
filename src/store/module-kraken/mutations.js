@@ -6,6 +6,8 @@ export function dsLogin(state, url) {
   state.user.uid = state.cliente.getUid();
   state.record = state.cliente.record.getRecord("I-am-Kraken");
   state.evento = state.cliente.event;
+  state.eventoChat = state.cliente.event;
+  getChatList(state);
   getUsersList(state);
 }
 
@@ -47,6 +49,12 @@ export function setLogout(state) {
   );
 }
 
+export function getChatList(state) {
+  state.eventoChat.subscribe("chat", function (value) {
+    state.chat = [...value];
+  });
+}
+
 export function getUsersList(state) {
   state.evento.subscribe("lsUser", function (value) {
     state.listUser = [...value];
@@ -55,6 +63,7 @@ export function getUsersList(state) {
 
 export function dsClose(state) {
   state.evento.unsubscribe("lsUser");
+  state.eventoChat.unsubscribe("chat");
   state.cliente.close();
 }
 
@@ -68,6 +77,7 @@ function setUsers(state, index, email, password) {
     state.user.activo = state.listUser[index].activo;
     state.user.email = state.listUser[index].email;
     state.user.password = state.listUser[index].password;
+    state.chat = [];
   } else {
     state.listUser.push({
       email,
@@ -88,4 +98,13 @@ function buscaUser(state, email) {
   );
 
   return index;
+}
+
+export function setChat(state, mensaje) {
+  state.chat.push({
+    email: state.user.email,
+    mensaje,
+  });
+
+  state.eventoChat.emit("chat", state.chat);
 }
