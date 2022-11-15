@@ -58,7 +58,6 @@ import { useStore } from "vuex";
 export default {
   setup() {
     const store = useStore();
-    store.commit("kraken/setChat", "");
     const texto = ref("");
 
     const onSalir = () => {
